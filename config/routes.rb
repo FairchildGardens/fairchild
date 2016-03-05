@@ -2,6 +2,10 @@ Rails.application.routes.draw do
 
   root to: 'dashboard#landing_page'
 
+  get '/dashboard/view_hunt'
+  get '/dashboard/get_hunt_tasks'
+  get '/dashboard/get_task_view'
+
   resources :tasks
   resources :hunts
   resources :users
