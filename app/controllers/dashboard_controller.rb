@@ -11,8 +11,9 @@ class DashboardController < ApplicationController
   end
 
   def view_hunt
-    hunt_id = params[:hunt]
+    hunt_id = params[:hunt].to_i
     @hunt = Hunt.find(hunt_id)
+
   end
 
   def get_hunt_tasks
