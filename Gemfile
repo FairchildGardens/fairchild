@@ -18,6 +18,7 @@ gem 'puma'
 gem 'sendgrid'
 # gem 'carrierwave'
 gem "font-awesome-rails"
+gem 'httparty'
 
 group :development do
   gem 'better_errors'
