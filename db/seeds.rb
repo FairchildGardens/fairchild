@@ -7,9 +7,12 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 # Environment variables (ENV['...']) can be set in the file .env file.
 
-hunt = Hunt.create(
-  name: 'Hunt 1'
-)
+10.times.each do |i|
+  Hunt.create(
+    name: "Hunt #{i}",
+    image: 'http://i.imgur.com/CveMZTU.jpg'
+  )
+end
 
 top_left_lat = 25.67765643085977 
 top_left_lng = -80.27585506439209
@@ -29,6 +32,7 @@ task_images = [
   'http://images.fineartamerica.com/images-medium-large/wild-carnation-flower-sami-sarkis.jpg'
 ];
 
+hunt = Hunt.first
 10.times.each do |i|
   
   final_lat = rand(bottom_right_lat..top_left_lat)
