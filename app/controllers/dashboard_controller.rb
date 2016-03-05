@@ -6,4 +6,7 @@ class DashboardController < ApplicationController
 
   end
 
+  def choose_challenge
+  end
+
 end
