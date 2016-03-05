@@ -1,0 +1,142 @@
+<script>
+  $(document).ready(function() {
+    
+
+    $.ajax({
+      url: '/dashboard/get_hunt_tasks',
+      data: { hunt_id: 3 }
+    }).done(function(tasks) {
+      
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: 25.6768691, lng: -80.2731083 },
+        zoom: 16,
+        mapTypeId: google.maps.MapTypeId.HYBRID
+      });
+
+      var markers = [];
+
+      $.each(tasks, function(i, task) {
+
+        var lat = parseFloat(task.geo.split(',')[0]);
+        var lng = parseFloat(task.geo.split(',')[1]);
+
+        markers.push({
+          position: { lat: lat, lng: lng },
+          map: map,
+          title: task.name,
+          taskName: task.name,
+          taskId: task.id
+        });
+
+      });
+
+      $.each(markers, function(i, marker) {
+
+        var gMarker = new google.maps.Marker(marker);
+
+        gMarker.addListener('click', function() {
+          
+          $('#show-task-view h1.title').html(marker.taskName);
+
+          $.ajax({
+            url: '/dashboard/get_task_view',
+            data: { task_id: marker.taskId }
+          }).done(function(task_html_partial) {
+            
+            $('#show-task-view .content').html(task_html_partial);
+            $('#show-task-view').addClass('active');
+
+          });
+
+        });
+
+      });
+
+
+    });
+
+
+  });
+
+  function initMap() {
+    
+    
+    
+    
+
+    // var watchID = null;
+
+    // // PhoneGap is ready
+    // //
+    // function startWatching() {
+    //   // Update every 1 ms seconds
+    //   var options = {
+    //     enableHighAccuracy: true, 
+    //     timeout: 5000,
+    //     maximumAge: 0,
+    //     desiredAccuracy: 0, 
+    //     frequency: 1 
+    //   };
+    //   watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
+    // }
+
+    // // onSuccess Geolocation
+    // //
+    // function onSuccess(position) {
+        
+    //   var str = 'Latitude: '  + position.coords.latitude      + '<br>' +
+    //             'Longitude: ' + position.coords.longitude     + '<br>' +
+    //             'Timestamp: ' + position.timestamp     + '<br>\r\n' ;
+    //   console.log(str);
+    // }
+
+    // // clear the watch that was started earlier
+    // // 
+    // function clearWatch() {
+    //   if (watchID != null) {
+    //       navigator.geolocation.clearWatch(watchID);
+    //       watchID = null;
+    //   }
+    // }
+
+    // // onError Callback receives a PositionError object
+    // //
+    // function onError(error) {
+    //   alert('code: '    + error.code    + '\n' +
+    //         'message: ' + error.message + '\n');
+    // }
+
+    // startWatching();
+
+  }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClG3delsA9nPWuaYzJ_XJXYDyK8W4-Uc0" async defer></script>
+
+<!-- Make sure all your bars are the first things in your <body> -->
+<header class="bar bar-nav">
+  <h1 class="title"><%= @hunt.name %></h1>
+</header>
+
+<!-- Wrap all non-bar HTML in the .content div (this is actually what scrolls) -->
+<div class="content">
+
+  <div id="map" style="height: 100%"></div>
+
+</div>
+
+<div class="bar bar-standard bar-footer">
+  Progress goes here..
+</div>
+
+
+<div id="show-task-view" class="modal">
+  <header class="bar bar-nav">
+    <a class="icon icon-close pull-right" href="#show-task-view"></a>
+    <h1 class="title"></h1>
+  </header>
+
+  <div class="content">
+    
+  </div>
+</div>
