@@ -13,7 +13,10 @@ group :development do
   gem 'web-console', '~> 2.0'
   gem 'spring'
 end
+
 gem 'bootstrap-sass'
+gem 'bootstrap-generators', '~> 3.3.4'
+
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'puma'
