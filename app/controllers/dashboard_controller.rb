@@ -26,4 +26,8 @@ class DashboardController < ApplicationController
     render partial: '/dashboard/task_view'
   end
 
+  def choose_challenge
+
+  end
+
 end

@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
   root to: 'dashboard#landing_page'
+  get '/challenge' => 'dashboard#choose_challenge', :as => :challenge
 
   get '/dashboard/view_hunt'
   get '/dashboard/get_hunt_tasks'

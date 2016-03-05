@@ -1,0 +1,33 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,500);
+@import "font-awesome";
+
+/**
+ * Colors
+ */
+$white: #FFFFFF;
+
+$primary-color-dark:   #388E3C;
+$primary-color:        #4CAF50;
+$primary-color-light:  #C8E6C9;
+$primary-color-text:   #FFFFFF;
+$accent-color:         #8BC34A;
+$primary-text-color:   #212121;
+$secondary-text-color: #727272;
+$divider-color:        #B6B6B6;
+
+/**
+ * Typography
+ */
+$font-family: 'Roboto', sans-serif;
+
+/**
+ * Global base styles
+ */
+body, html {
+  background-color: $primary-color;
+}
+
+div, span, body, html, h1, h2, h3, h4, p {
+  font-family: $font-family;
+  color: $primary-text-color;
+}
