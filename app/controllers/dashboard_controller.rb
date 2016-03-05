@@ -6,10 +6,13 @@ class DashboardController < ApplicationController
 
   end
 
+  def choose_challenge
+    @hunts = Hunt.all
+  end
+
   def view_hunt
-
-    @hunt = Hunt.first
-
+    hunt_id = params[:hunt]
+    @hunt = Hunt.find(hunt_id)
   end
 
   def get_hunt_tasks
@@ -24,10 +27,6 @@ class DashboardController < ApplicationController
     @task = Task.find_by(id: params[:task_id])
 
     render partial: '/dashboard/task_view'
-  end
-
-  def choose_challenge
-
   end
 
 end
