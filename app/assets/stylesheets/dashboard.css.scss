@@ -67,10 +67,6 @@ body.dashboard {
           cursor: pointer;
         }
 
-        .challenge__image {
-          width: 100%;
-        }
-
         .challenge__desc {
           position: absolute;
           text-align: center;
@@ -79,6 +75,10 @@ body.dashboard {
           color: $white;
           font-family: $font-family;
           font-size: 32px;
+        }
+
+        .challenge__image {
+          width: 100%;
         }
       }
     }
