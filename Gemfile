@@ -10,6 +10,7 @@ gem 'jbuilder', '~> 2.0'
 
 gem 'bootstrap-sass'
 gem 'bootstrap-generators', '~> 3.3.4'
+gem 'ratchet-sass'
 
 gem 'omniauth'
 gem 'omniauth-facebook'
