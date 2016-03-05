@@ -21,10 +21,7 @@
   <dd><%= @task.claim_type %></dd>
 
   <dt>Image:</dt>
-  <dd><%= @task.image %></dd>
-
-  <dt>Draft:</dt>
-  <dd><%= @task.draft %></dd>
+  <dd><%= image_tag "#{@task.image}" %></dd>
 
   <dt>Hunt:</dt>
   <dd><%= @task.hunt_id %></dd>

@@ -43,7 +43,7 @@
   </div>
 
   <div class="form-group">
-    <%= f.label :image, class: "col-sm-2 control-label" %>
+    <%= f.label "Image Url", class: "col-sm-2 control-label" %>
     <div class="col-sm-10">
       <%= f.text_field :image, class: "form-control" %>
     </div>
@@ -67,8 +67,8 @@
   function initMap() {
     var mapDiv = document.getElementById('map');
     var map = new google.maps.Map(mapDiv, {
-      center: {lat: 44.540, lng: -78.546},
-      zoom: 8
+      center: {lat: 25.677192302730536, lng: -80.27254343043751},
+      zoom: 16
   });
 
     // var marker = new google.maps.Marker({
