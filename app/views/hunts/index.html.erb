@@ -22,7 +22,8 @@
     <tbody>
       <%= content_tag_for(:tr, @hunts) do |hunt| %>
             <td><%= hunt.name %></td>
-            <td><%= hunt.image %></td>
+            <!-- this is where we'd add the image helper -->
+            <td><%= image_tag "#{hunt.image}" %></td>
             <td><%= hunt.description %></td>
             <td><%= link_to 'Show', hunt %></td>
         <td><%= link_to 'Edit', edit_hunt_path(hunt) %></td>

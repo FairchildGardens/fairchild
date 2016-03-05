@@ -16,6 +16,7 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'puma'
 gem 'sendgrid'
+# gem 'carrierwave'
 gem "font-awesome-rails"
 
 group :development do
