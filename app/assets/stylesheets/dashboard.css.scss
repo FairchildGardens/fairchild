@@ -1,0 +1,67 @@
+@import "global_mobile";
+
+
+body.dashboard {
+
+  .content-padded {
+    margin: 0;
+  }
+
+  &.landing_page {
+
+    .background-image {
+      zoom: 88%;
+      margin-left: -400px;
+    }
+
+    .container__foot {
+      margin: 0;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
+
+  }
+
+  &.choose_challenge {
+
+    // Header
+    .content-padded {
+      margin: 0;
+      margin-top: 44px;
+    }
+
+    .subheader {
+      padding: 1rem;
+      text-align: center;
+      font-family: $font-family;
+    }
+
+    .challenge__container {
+
+      .challenge__item {
+        position: relative;
+        margin-top: -6px;
+
+        &:hover {
+          cursor: pointer;
+        }
+
+        .challenge__image {
+          width: 100%;
+        }
+
+        .challenge__desc {
+          position: absolute;
+          text-align: center;
+          top: 40%;
+          width: 100%;
+          color: $white;
+          font-family: $font-family;
+          font-size: 32px;
+        }
+      }
+    }
+  }
+
+}
