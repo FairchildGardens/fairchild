@@ -181,6 +181,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rainbow (2.1.0)
     rake (10.5.0)
+    ratchet-sass (2.0.2)
     rspec-core (3.4.3)
       rspec-support (~> 3.4.0)
     rspec-expectations (3.4.0)
@@ -276,6 +277,7 @@ DEPENDENCIES
   rails (= 4.2.5)
   rails_12factor
   rails_layout
+  ratchet-sass
   rspec-rails
   rubocop
   sass-rails (~> 5.0)
