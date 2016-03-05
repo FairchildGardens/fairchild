@@ -8,6 +8,9 @@ default: &default
   adapter: sqlite3
   pool: 5
   timeout: 5000
+  # database: fairchild_development
+  host: host: 127.0.0.1
+  username: root
 
 development:
   <<: *default
