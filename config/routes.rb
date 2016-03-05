@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get '/dashboard/view_hunt'
   get '/dashboard/get_hunt_tasks'
   get '/dashboard/get_task_view'
+  post '/dashboard/mark_task_as_done'
 
   resources :tasks
   resources :hunts
