@@ -8,11 +8,13 @@
 
     <ul class="table-view">
 
-      <% 10.times do %>
-        <div class="challenge__item">
-          <span class="challenge__desc">Flower Challenge</span>
-          <img class="challenge__image" src="http://i.imgur.com/CveMZTU.jpg">
-        </div>
+      <% @hunts.each do |hunt| %>
+        <%= link_to("/dashboard/view_hunt?hunt=#{hunt.id}") do %>
+          <div class="challenge__item">
+            <span class="challenge__desc"><%= hunt.name %></span>
+            <img class="challenge__image" src="<%= hunt.image %>">
+          </div>
+        <% end %>
       <% end %>
 
     </ul>
@@ -20,3 +22,4 @@
   </div>
 
 </div>
+
