@@ -6,6 +6,10 @@ class DashboardController < ApplicationController
 
   end
 
+  def choose_challenge
+    @hunts = Hunt.all
+  end
+
   def view_hunt
 
     if current_user.blank?
@@ -13,7 +17,8 @@ class DashboardController < ApplicationController
       return
     end
 
-    @hunt = Hunt.first
+    hunt_id = params[:hunt].to_i
+    @hunt = Hunt.find(hunt_id)
 
   end
 
@@ -31,10 +36,6 @@ class DashboardController < ApplicationController
     @task_done = UserTask.where(user_id: current_user.id, task_id: @task.id).count > 0
 
     render partial: '/dashboard/task_view'
-  end
-
-  def choose_challenge
-
   end
 
   def mark_task_as_done

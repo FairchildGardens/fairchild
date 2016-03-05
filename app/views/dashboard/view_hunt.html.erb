@@ -11,6 +11,66 @@
       mapTypeId: google.maps.MapTypeId.HYBRID
     });
 
+    var watchID = null;
+    var currentLocationMarker;
+
+    // PhoneGap is ready
+    //
+    function startWatching() {
+      // Update every 1 ms seconds
+      var options = {
+        enableHighAccuracy: true, 
+        timeout: 5000,
+        maximumAge: 0,
+        desiredAccuracy: 0, 
+        frequency: 1 
+      };
+      watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
+    }
+
+    // onSuccess Geolocation
+    //
+    function onSuccess(position) {
+        
+      var str = 'Latitude: '  + position.coords.latitude      + '<br>' +
+                'Longitude: ' + position.coords.longitude     + '<br>' +
+                'Timestamp: ' + position.timestamp     + '<br>\r\n' ;
+      console.log(str);
+
+      var currentLocationMarkerData = {
+        position: { lat: position.coords.latitude, lng: position.coords.longitude },
+        map: map,
+        icon: '<%= image_url('current-location-icon.png') %>'
+      };
+
+      if( currentLocationMarker != null ) {
+        currentLocationMarker.setMap(null);
+      }
+
+      currentLocationMarker = new google.maps.Marker(currentLocationMarkerData);
+    }
+
+    // clear the watch that was started earlier
+    // 
+    function clearWatch() {
+      if (watchID != null) {
+          navigator.geolocation.clearWatch(watchID);
+          watchID = null;
+      }
+      if( currentLocationMarker != null ) {
+        currentLocationMarker.setMap(null);
+      }
+    }
+
+    // onError Callback receives a PositionError object
+    //
+    function onError(error) {
+      alert('code: '    + error.code    + '\n' +
+            'message: ' + error.message + '\n');
+    }
+
+    startWatching();
+
     var markers = [];
     setMarkersOnMap(map);
 
@@ -109,57 +169,6 @@
 
   });
 
-  function initMap() {
-    
-    
-    
-    
-
-    // var watchID = null;
-
-    // // PhoneGap is ready
-    // //
-    // function startWatching() {
-    //   // Update every 1 ms seconds
-    //   var options = {
-    //     enableHighAccuracy: true, 
-    //     timeout: 5000,
-    //     maximumAge: 0,
-    //     desiredAccuracy: 0, 
-    //     frequency: 1 
-    //   };
-    //   watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
-    // }
-
-    // // onSuccess Geolocation
-    // //
-    // function onSuccess(position) {
-        
-    //   var str = 'Latitude: '  + position.coords.latitude      + '<br>' +
-    //             'Longitude: ' + position.coords.longitude     + '<br>' +
-    //             'Timestamp: ' + position.timestamp     + '<br>\r\n' ;
-    //   console.log(str);
-    // }
-
-    // // clear the watch that was started earlier
-    // // 
-    // function clearWatch() {
-    //   if (watchID != null) {
-    //       navigator.geolocation.clearWatch(watchID);
-    //       watchID = null;
-    //   }
-    // }
-
-    // // onError Callback receives a PositionError object
-    // //
-    // function onError(error) {
-    //   alert('code: '    + error.code    + '\n' +
-    //         'message: ' + error.message + '\n');
-    // }
-
-    // startWatching();
-
-  }
 </script>
 
 <!-- Make sure all your bars are the first things in your <body> -->
