@@ -69,8 +69,21 @@
       center: {lat: 44.540, lng: -78.546},
       zoom: 8
     });
+
+    // var marker = new google.maps.Marker({
+    //   position: myLatLng,
+    //   map: map,
+    //   title: 'Hello World!'
+    // });
+
+    google.maps.event.addListener(map, 'click', function(event) {
+
+      marker = new google.maps.Marker({position: event.latLng, map: map});
+      // alert(event.latLng)
+      $("input#task_geo").val(event.latLng)
+
+    });
   }
-  
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClG3delsA9nPWuaYzJ_XJXYDyK8W4-Uc0&amp;callback=initMap" async defer></script>
