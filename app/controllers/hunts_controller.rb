@@ -1,28 +1,20 @@
 class HuntsController < ApplicationController
   before_action :set_hunt, only: [:show, :edit, :update, :destroy]
 
-  # GET /hunts
-  # GET /hunts.json
   def index
     @hunts = Hunt.all
   end
 
-  # GET /hunts/1
-  # GET /hunts/1.json
   def show
   end
 
-  # GET /hunts/new
   def new
     @hunt = Hunt.new
   end
 
-  # GET /hunts/1/edit
   def edit
   end
 
-  # POST /hunts
-  # POST /hunts.json
   def create
     @hunt = Hunt.new(hunt_params)
 
@@ -37,8 +29,6 @@ class HuntsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /hunts/1
-  # PATCH/PUT /hunts/1.json
   def update
     respond_to do |format|
       if @hunt.update(hunt_params)
@@ -51,8 +41,6 @@ class HuntsController < ApplicationController
     end
   end
 
-  # DELETE /hunts/1
-  # DELETE /hunts/1.json
   def destroy
     @hunt.destroy
     respond_to do |format|
@@ -62,12 +50,10 @@ class HuntsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_hunt
       @hunt = Hunt.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def hunt_params
       params.require(:hunt).permit(:name, :image, :description)
     end

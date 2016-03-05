@@ -16,6 +16,7 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'puma'
 gem 'sendgrid'
+# gem 'carrierwave'
 
 group :development do
   gem 'better_errors'
