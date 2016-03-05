@@ -1,31 +1,24 @@
 <%= render 'partials/header' %>
 
-<ul class="table-view">
-  <li class="table-view-cell media">
-    <a class="navigate-right">
-      <img class="media-object pull-left" src="http://placehold.it/42x42">
-      <div class="media-body">
-        Item 1
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.</p>
-      </div>
-    </a>
-  </li>
-  <li class="table-view-cell media">
-    <a class="navigate-right">
-      <img class="media-object pull-left" src="http://placehold.it/42x42">
-      <div class="media-body">
-        Item 1
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.</p>
-      </div>
-    </a>
-  </li>
-  <li class="table-view-cell media">
-    <a class="navigate-right">
-      <img class="media-object pull-left" src="http://placehold.it/42x42">
-      <div class="media-body">
-        Item 1
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.</p>
-      </div>
-    </a>
-  </li>
-</ul>
+<div class="content-padded">
+
+  <div class="subheader">
+    <h3>Choose an adventure</h3>
+  </div>
+
+  <div class="challenge__container">
+
+    <ul class="table-view">
+
+      <% 10.times do %>
+        <div class="challenge__item">
+          <img class="challenge__image" src="http://i.imgur.com/CveMZTU.jpg">
+          <span class="challenge__desc">Flower Challenge</span>
+        </div>
+      <% end %>
+
+    </ul>
+
+  </div>
+
+</div>
