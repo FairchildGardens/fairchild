@@ -1,5 +1,6 @@
 class HuntsController < ApplicationController
   before_action :set_hunt, only: [:show, :edit, :update, :destroy]
+  before_action :user_is_admin?, only: [:edit, :new, :create, :update]
 
   def index
     @hunts = Hunt.all
@@ -51,6 +52,13 @@ class HuntsController < ApplicationController
   end
 
   private
+
+    def user_is_admin?
+      unless current_user && current_user.admin
+        redirect_to hunts_path
+      end
+    end
+
     def set_hunt
       @hunt = Hunt.find(params[:id])
     end
