@@ -31,7 +31,7 @@ hunts = []
   hunts << hunt
 end
 
-plants = Plant.first(15)
+plants = Plant.all
 
 hunts.each do |hunt|
   plant_count = 0
