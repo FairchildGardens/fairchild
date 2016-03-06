@@ -1,7 +1,9 @@
 <div class="preview_image">
   <img src="<%= @task.image %>" alt="" style="width: 100%;" />
 </div>
-
+<div class="description content-padded">
+	<%= @task.description %>
+</div>
 
 <% if @task_done %>
   <button class="btn btn-positive btn-block js-mark-as-not-done" data-task-id="<%= @task.id %>" data-ignore="push">Task is done!</button>
