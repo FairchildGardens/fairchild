@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160305174801) do
+ActiveRecord::Schema.define(version: 20160306005020) do
 
   create_table "hunt_users", force: :cascade do |t|
     t.integer  "user_id"
@@ -28,6 +28,15 @@ ActiveRecord::Schema.define(version: 20160305174801) do
     t.datetime "updated_at",  null: false
   end
 
+  create_table "plants", force: :cascade do |t|
+    t.string   "common_name"
+    t.string   "botanical_name"
+    t.string   "family"
+    t.string   "location_in_garden"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
   create_table "tasks", force: :cascade do |t|
     t.string   "name"
     t.string   "geo"
@@ -35,8 +44,9 @@ ActiveRecord::Schema.define(version: 20160305174801) do
     t.string   "image"
     t.string   "draft"
     t.integer  "hunt_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.text     "description"
   end
 
   create_table "user_tasks", force: :cascade do |t|

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get '/dashboard/get_task_view'
   post '/dashboard/mark_task_as_done'
 
+  get '/admin' => 'hunts#index'
   resources :tasks
   resources :hunts
   resources :users
