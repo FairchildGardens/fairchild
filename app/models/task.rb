@@ -25,7 +25,6 @@ class Task < ActiveRecord::Base
 
   def self.search_wikipedia(query)
     require 'openssl'
-    require 'wikipedia'
 
     begin
       prev_setting = OpenSSL::SSL.send(:remove_const, :VERIFY_PEER)
