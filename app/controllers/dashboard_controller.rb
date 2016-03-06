@@ -49,6 +49,7 @@ class DashboardController < ApplicationController
     ).first_or_create()
 
     @task_done = true
+    current_user.score += 10
 
     render partial: '/dashboard/task_view'
   end

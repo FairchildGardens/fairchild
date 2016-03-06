@@ -8,8 +8,6 @@ class Task < ActiveRecord::Base
   before_save :remove_parens
 
   def remove_parens
-    p self.geo
-
     self.geo = self.geo.gsub('(', '').gsub(')', '')
   end
 
