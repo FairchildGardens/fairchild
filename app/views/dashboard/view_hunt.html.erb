@@ -84,13 +84,10 @@
         data: { hunt_id: 3 }
       }).done(function(data) {
 
-        console.log(data);
-
         var total_tasks = data.tasks.length;
         var total_tasks_done = data.done_task_ids.length;
         var total_percent_done = Math.ceil(total_tasks_done / total_tasks * 100)
         $('.progress-bar .progress').css('width', total_percent_done+'%');
-
 
         clearMarkers();
 
@@ -157,8 +154,11 @@
           task_id: $button.data('task-id') 
         }
       }).done(function(task_html_partial) {
+        
         setMarkersOnMap(map);
         $('#show-task-view').removeClass('active');
+        $('.js-open-task[data-task-id="'+$button.data('task-id')+'"] .badge').removeClass('badge-primary').addClass('badge-positive').html('Done');
+
       });
 
     });
@@ -173,6 +173,39 @@
 
       }
 
+    });
+
+    $body.on('click', 'a.js-open-task', function(e) {
+      e.preventDefault();
+
+      var $button = $(this);
+      var taskId = $(this).data('task-id');
+
+      $.ajax({
+        url: '/dashboard/get_task_view',
+        data: { task_id: taskId }
+      }).done(function(task_html_partial) {
+        
+        $('#show-task-view h1.title').html($button.find('span.task-name').html());
+        $('#show-task-view .content').html(task_html_partial);
+        $('#show-task-view').addClass('active');
+
+      });
+
+    });
+
+    $body.on('click', '.js-toggle-map-list', function(e) {
+      e.preventDefault();
+
+      if( $(this).data('showing') == 'map' ) {
+        $('.show-map-view').hide();
+        $('.show-list-view').show();
+        $(this).data('showing', 'list').html('Map');
+      } else {
+        $('.show-list-view').hide();
+        $('.show-map-view').show();
+        $(this).data('showing', 'map').html('List');
+      }
 
     });
 
@@ -182,13 +215,40 @@
 
 <!-- Make sure all your bars are the first things in your <body> -->
 <header class="bar bar-nav">
+  <a href="/challenge" class="icon icon-left-nav pull-left" data-ignore="push"></a>
   <h1 class="title"><%= @hunt.name %></h1>
+  <a href="#" class="btn pull-right js-toggle-map-list" data-showing="map" data-ignore="push">
+    List
+  </a>
 </header>
 
 <!-- Wrap all non-bar HTML in the .content div (this is actually what scrolls) -->
 <div class="content">
+  
+  <div class="show-map-view" style="height: 100%;">
+    <div id="map" style="height: 100%"></div>
+  </div>
 
-  <div id="map" style="height: 100%"></div>
+  <div class="show-list-view" style="display: none;">
+    <ul class="table-view">
+
+      <% @hunt.tasks.each do |task| %>
+        <li class="table-view-cell js-open-task">
+          <a href="#" class="js-open-task" data-task-id="<%= task.id %>" data-ignore="push">
+            <% if @done_task_ids.include?(task.id) %>
+              <span class="badge badge-positive">Done</span>
+            <% else %>
+              <span class="badge badge-primary">Missing</span>
+            <% end %>
+            <span class="task-name">
+              <%= task.name %> 
+            </span>
+          </a>
+        </li>
+      <% end %>
+
+    </ul>  
+  </div>
 
 </div>
 

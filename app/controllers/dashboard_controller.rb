@@ -19,6 +19,7 @@ class DashboardController < ApplicationController
 
     hunt_id = params[:hunt].to_i
     @hunt = Hunt.find(hunt_id)
+    @done_task_ids = current_user.tasks.where(hunt_id: @hunt.id).pluck(:task_id)
 
   end
 

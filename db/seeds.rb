@@ -7,6 +7,8 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 # Environment variables (ENV['...']) can be set in the file .env file.
 
+puts 'RUN MOFO'
+
 10.times.each do |i|
   Hunt.create(
     name: "Hunt #{i}",
