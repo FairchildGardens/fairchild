@@ -3,37 +3,25 @@
     <span class="glyphicon glyphicon-plus"></span>
     New Task
   <% end %>
-  <h1>Listing tasks</h1>
+  <h1>Task Listings</h1>
 </div>
 
-<div class="table-responsive">
-  <table class="table table-striped table-bordered table-hover">
-    <thead>
-      <tr>
-            <th>Name</th>
-            <th>Geo</th>
-            <th>Claim type</th>
-            <th>Image</th>
-            <th>Draft</th>
-            <th>Hunt</th>
-            <th></th>
-        <th></th>
-        <th></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <%= content_tag_for(:tr, @tasks) do |task| %>
-            <td><%= task.name %></td>
-            <td><%= task.geo %></td>
-            <td><%= task.claim_type %></td>
-            <td><%= task.image %></td>
-            <td><%= task.draft %></td>
-            <td><%= task.hunt_id %></td>
-            <td><%= link_to 'Show', task %></td>
-        <td><%= link_to 'Edit', edit_task_path(task) %></td>
-        <td><%= link_to 'Destroy', task, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      <% end %>
-    </tbody>
-  </table>
+<div class="row">
+  <% @tasks.each do |task| %>
+    <div class="col-md-4 col-sm-6 col-xs-12">
+      <div class="task___container">
+        <div class="task__name">
+          <h2><%= task.name %></h2>
+        </div>
+        <div class="task__image">
+          <%= image_tag "#{task.image}" %>
+        </div>
+        <div class="task__buttons">
+          <%= link_to 'Show', task %>
+          <%= link_to 'Edit', edit_task_path(task) %>
+          <%= link_to 'Destroy', task, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </div>
+      </div>
+    </div>
+  <% end %>
 </div>

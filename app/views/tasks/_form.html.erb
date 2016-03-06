@@ -26,6 +26,8 @@
       <%= f.text_field :name, class: "form-control" %>
     </div>
   </div>
+  <button name="search" type="button">Search</button>
+
   <div class="form-group">
     <%= f.label :geo, class: "col-sm-2 control-label" %>
     <div class="col-sm-10">
@@ -34,6 +36,7 @@
   </div>
 
   <div id="map"></div>
+  <img src="<% :image %>">
 
   <div class="form-group">
     <%= f.label :claim_type, class: "col-sm-2 control-label" %>
@@ -55,6 +58,14 @@
       <%= f.select :hunt_id, options_for_select(Task.hunt_options), {}, class: "form-control" %>
     </div>
   </div>
+
+  <div class="form-group">
+    <%= f.label :description, class: "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_area :description, class: "form-control" %>
+    </div>
+  </div>
+
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
       <%= f.submit class: "btn btn-primary" %>
@@ -100,6 +111,23 @@
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClG3delsA9nPWuaYzJ_XJXYDyK8W4-Uc0&amp;callback=initMap" async defer></script>
 
-
-
-
+<script>
+$(document).ready(function() {
+  var search = $('button[name="search"]');
+  var img = $('img');
+  var descr = $('textarea[name="task[description]"]');
+  var imgUrl = $('input[name="task[image]"]');
+  var name = $('input[name="task[name]"]');
+  search.on('click', function(evt) {
+    $.get('/search_wiki?query=' + name.val(), function(data) {
+      if (data['success']) {
+        img.attr('src', data['image']);
+        imgUrl.val(data['image']);
+        var descrObj = data['excerpt']['query']['pages'];
+        var key = Object.keys(descrObj)[0];
+        descr.val(descrObj[key]['extract']);
+      }
+    });
+  });
+});
+</script>
