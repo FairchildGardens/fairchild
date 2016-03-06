@@ -27,6 +27,7 @@ group :development do
   gem 'spring-commands-rspec'
   gem 'web-console', '~> 2.0'
   gem 'spring'
+  gem 'dotenv-rails'
 end
 
 group :development, :test do
