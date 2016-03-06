@@ -6,6 +6,7 @@ class HuntsController < ApplicationController
   end
 
   def show
+    # @tasks = @hunt.tasks.select(:id, :name)
   end
 
   def new

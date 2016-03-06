@@ -20,5 +20,17 @@
   <dd><%= @hunt.description %></dd>
 </dl>
 
+<table class="table">
+  <th>Task Name</th>
+  <%= @hunt.tasks.each do |task| %>
+    <tr>
+      <td>
+        <%= task.name %>
+      </td> 
+    </tr>
+    
+  <% end %>
+</table>
+
 <%= link_to 'New Task', new_task_path %>
 
