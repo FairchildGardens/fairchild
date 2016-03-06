@@ -1,5 +1,6 @@
 class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :user_is_admin?, only: [:update, :create, :new, :edit]
 
   # GET /tasks
   # GET /tasks.json
@@ -65,6 +66,12 @@ class TasksController < ApplicationController
     respond_to do |format|
       format.html { redirect_to tasks_url, notice: 'Task was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def user_is_admin?
+    unless current_user && current_user.admin
+      redirect_to hunts_path
     end
   end
 
