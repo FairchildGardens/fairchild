@@ -5,8 +5,10 @@
 	<%= @task.description %>
 </div>
 
-<% if @task_done %>
-  <button class="btn btn-positive btn-block js-mark-as-not-done" data-task-id="<%= @task.id %>" data-ignore="push">Task is done!</button>
-<% else %>
-  <button class="btn btn-positive btn-block btn-outlined js-mark-as-done" data-task-id="<%= @task.id %>" data-ignore="push">Mark as done!</button>
-<% end %>
+<div class="cta">
+  <% if @task_done %>
+    <button class="btn btn-positive btn-block js-mark-as-not-done" data-task-id="<%= @task.id %>" data-ignore="push">Task is done!</button>
+  <% else %>
+    <button class="btn btn-positive btn-block btn-outlined js-mark-as-done" data-task-id="<%= @task.id %>" data-ignore="push">Mark as done!</button>
+  <% end %>
+</div>
