@@ -8,8 +8,6 @@ class Task < ActiveRecord::Base
   before_save :remove_parens
 
   def remove_parens
-    p self.geo
-
     self.geo = self.geo.gsub('(', '').gsub(')', '')
   end
 
@@ -25,24 +23,34 @@ class Task < ActiveRecord::Base
     ["plant code", "image match", "QR"]
   end
 
-  def searchWiki(query)
+  def self.search_wikipedia(query)
+    require 'openssl'
+    require 'wikipedia'
+
     begin
-      excerptUrl = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&&exintro=1&explaintext=1&titles=%s'
-      excerptQuery = sprintf(excerptUrl, query)
-      excerpt = HTTParty.get(URI.escape(excerptQuery))
-      imageNameUrl = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=images&titles=%s'
-      imageNameQuery = sprintf(imageNameUrl, query)
-      imageName = HTTParty.get(URI.escape(imageNameQuery))
-      firstImage = imageName['query']['pages'].first()[1]['images'].first['title']
-      imageUrl = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=imageinfo&titles=%s&iiprop=url'
-      imageUrlQuery = sprintf(imageUrl, firstImage)
-      image = HTTParty.get(URI.escape(imageUrlQuery))['query']['pages'].first[1]['imageinfo'].first['url']
-      success = excerpt['query']['pages']['-1'].blank?
+      prev_setting = OpenSSL::SSL.send(:remove_const, :VERIFY_PEER)
+      OpenSSL::SSL.const_set(:VERIFY_PEER, OpenSSL::SSL::VERIFY_NONE)
+
+      wikipedia = Wikipedia.find(query)
+
+      # do my connnection thang!
+      # OpenSSL::SSL.send(:remove_const, :VERIFY_PEER)
+      # OpenSSL::SSL.const_set(:VERIFY_PEER, prev_setting)
+
+      if wikipedia.image_urls.present?
+        image = wikipedia.image_urls.first
+        excerpt = wikipedia.summary
+        success = true
+      else
+        success = false
+      end
+
     rescue
       success = false
       excerpt = ''
       image = ''
     end
-      {"success" => success, "excerpt" => excerpt, "image" => image}
+
+     return {:success => success, :excerpt => excerpt, :image => image}
   end
 end

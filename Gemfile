@@ -18,7 +18,8 @@ gem 'puma'
 gem 'sendgrid'
 # gem 'carrierwave'
 gem "font-awesome-rails"
-gem 'httparty'
+# gem 'httparty'
+gem 'wikipedia-client'
 
 group :development do
   gem 'better_errors'

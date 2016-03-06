@@ -40,8 +40,7 @@ class TasksController < ApplicationController
 
   # GET /tasks/search_wiki
   def search_wiki
-    @task = Task.new()
-    result = @task.searchWiki(params[:query])
+    result = Task.search_wikipedia(params[:query])
     render json: result
   end
 
