@@ -34,9 +34,51 @@ body.hunts {
         position: absolute;
       }
       .hunt__image {
-
+        img {
+          max-height: 278px;
+        }
       }
       .hunt__buttons {
+        position: absolute;
+        bottom: 12px;
+        width: 100%;
+        text-align: center;
+
+        a {
+          padding: 1rem;
+          text-align: center;
+          color: $white;
+          background-color: $accent-color;
+          border-radius: 20px;
+        }
+      }
+    }
+  }
+}
+
+body.tasks {
+  &.index {
+    .col-md-4 {
+      padding: 1rem;
+    }
+    .task___container {
+      position: relative;
+
+      .task__name {
+        position: absolute;
+        color: $white;
+        width: 100%;
+
+        h2 {
+          text-align: center;
+        }
+      }
+      .task__image {
+        img {
+          max-height: 278px;
+        }
+      }
+      .task__buttons {
         position: absolute;
         bottom: 12px;
         width: 100%;
