@@ -24,7 +24,6 @@ class DashboardController < ApplicationController
   end
 
   def get_hunt_tasks
-    params[:hunt_id] = Hunt.first.id
 
     tasks = Task.where(hunt_id: params[:hunt_id])
     done_task_ids = current_user.tasks.where(hunt_id: params[:hunt_id]).pluck(:task_id)
