@@ -5,6 +5,14 @@ class Task < ActiveRecord::Base
   has_many :user_tasks
   has_many :users, through: :user_tasks
 
+  before_save :remove_parens
+
+  def remove_parens
+    p self.geo
+
+    self.geo = self.geo.gsub('(', '').gsub(')', '')
+  end
+
   def self.hunt_options
     hunts = []
     Hunt.find_each do |hunt|
