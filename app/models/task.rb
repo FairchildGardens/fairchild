@@ -26,9 +26,10 @@ class Task < ActiveRecord::Base
       OpenSSL::SSL.const_set(:VERIFY_PEER, OpenSSL::SSL::VERIFY_NONE)
 
       wikipedia = Wikipedia.find(query)
+
       # do my connnection thang!
-      OpenSSL::SSL.send(:remove_const, :VERIFY_PEER)
-      OpenSSL::SSL.const_set(:VERIFY_PEER, prev_setting)
+      # OpenSSL::SSL.send(:remove_const, :VERIFY_PEER)
+      # OpenSSL::SSL.const_set(:VERIFY_PEER, prev_setting)
 
       if wikipedia.image_urls.present?
         image = wikipedia.image_urls.first

@@ -7,7 +7,7 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 # Environment variables (ENV['...']) can be set in the file .env file.
 
-plants = Plant.first(10)
+plants = Plant.first(50)
 
 plants.each do |plant|
   puts 'calling wiki'
@@ -15,6 +15,7 @@ plants.each do |plant|
 
   puts "Wiki success: #{wiki}"
   if wiki[:success]
+    puts "Plant Name: #{plant.botanical_name}"
     task = Task.where(name: plant.botanical_name.titlecase)
 
     if task.blank?
