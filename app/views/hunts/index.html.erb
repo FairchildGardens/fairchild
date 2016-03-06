@@ -3,32 +3,28 @@
     <span class="glyphicon glyphicon-plus"></span>
     New Hunt
   <% end %>
-  <h1>Listing hunts</h1>
+  <h1>Hunt Listings</h1>
 </div>
 
-<div class="table-responsive">
-  <table class="table table-striped table-bordered table-hover">
-    <thead>
-      <tr>
-            <th>Name</th>
-            <th>Image</th>
-            <th>Description</th>
-            <th></th>
-        <th></th>
-        <th></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <%= content_tag_for(:tr, @hunts) do |hunt| %>
-            <td><%= hunt.name %></td>
-            <!-- this is where we'd add the image helper -->
-            <td><%= image_tag "#{hunt.image}" %></td>
-            <td><%= hunt.description %></td>
-            <td><%= link_to 'Show', hunt %></td>
-        <td><%= link_to 'Edit', edit_hunt_path(hunt) %></td>
-        <td><%= link_to 'Destroy', hunt, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      <% end %>
-    </tbody>
-  </table>
+<div class="row">
+  <% @hunts.each do |hunt| %>
+    <div class="col-md-4 col-sm-6 col-xs-12">
+      <div class="hunt___container">
+        <div class="hunt__name">
+          <h2><%= hunt.name %></h2>
+        </div>
+        <div class="hunt__desc">
+          <p><%= hunt.description %></p>
+        </div>
+        <div class="hunt__image">
+          <%= image_tag "#{hunt.image}" %>
+        </div>
+        <div class="hunt__buttons">
+          <%= link_to 'Show', hunt %>
+          <%= link_to 'Edit', edit_hunt_path(hunt) %>
+          <%= link_to 'Destroy', hunt, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </div>
+      </div>
+    </div>
+  <% end %>
 </div>

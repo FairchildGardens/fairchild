@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get '/dashboard/get_hunt_tasks'
   get '/dashboard/get_task_view'
 
+  get '/admin' => 'hunts#index'
   resources :tasks
   resources :hunts
   resources :users
