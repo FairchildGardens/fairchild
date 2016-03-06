@@ -11,6 +11,11 @@ class Task < ActiveRecord::Base
     self.geo = self.geo.gsub('(', '').gsub(')', '')
   end
 
+  def default_hunt_option
+    option = self.hunt_id ? self.hunt_id : Hunt.first.id
+    option
+  end
+
   def self.hunt_options
     hunts = []
     Hunt.find_each do |hunt|
