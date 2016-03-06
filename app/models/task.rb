@@ -18,19 +18,23 @@ class Task < ActiveRecord::Base
   end
 
   def searchWiki(query)
-    excerptUrl = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&&exintro=1&explaintext=1&titles=%s'
-    excerptQuery = sprintf(excerptUrl, query)
-    excerpt = HTTParty.get(URI.escape(excerptQuery))
-    imageNameUrl = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=images&titles=%s'
-    imageNameQuery = sprintf(imageNameUrl, query)
-    imageName = HTTParty.get(URI.escape(imageNameQuery))
-    #catch empty imageName
-    firstImage = imageName['query']['pages'].first()[1]['images'].first['title']
-    imageUrl = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=imageinfo&titles=%s&iiprop=url'
-    imageUrlQuery = sprintf(imageUrl, firstImage)
-    image = HTTParty.get(URI.escape(imageUrlQuery))['query']['pages'].first[1]['imageinfo'].first['url']
-    success = excerpt['query']['pages']['-1'].blank?
-
-    {"success" => success, "excerpt" => excerpt, "image" => image}
+    begin
+      excerptUrl = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&&exintro=1&explaintext=1&titles=%s'
+      excerptQuery = sprintf(excerptUrl, query)
+      excerpt = HTTParty.get(URI.escape(excerptQuery))
+      imageNameUrl = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=images&titles=%s'
+      imageNameQuery = sprintf(imageNameUrl, query)
+      imageName = HTTParty.get(URI.escape(imageNameQuery))
+      firstImage = imageName['query']['pages'].first()[1]['images'].first['title']
+      imageUrl = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=imageinfo&titles=%s&iiprop=url'
+      imageUrlQuery = sprintf(imageUrl, firstImage)
+      image = HTTParty.get(URI.escape(imageUrlQuery))['query']['pages'].first[1]['imageinfo'].first['url']
+      success = excerpt['query']['pages']['-1'].blank?
+    rescue
+      success = false
+      excerpt = ''
+      image = ''
+    end
+      {"success" => success, "excerpt" => excerpt, "image" => image}
   end
 end
