@@ -7,6 +7,21 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 # Environment variables (ENV['...']) can be set in the file .env file.
 
+require 'csv'
+
+puts "importing plants"
+begin
+  CSV.foreach("plant_names.csv") do |row|
+      common_name = row[0]
+      botanical_name = row[1]
+      family = row[2]
+      location_in_garden = row[3]
+      Plant.where(common_name: common_name, botanical_name: botanical_name, family: family, location_in_garden: location_in_garden).first_or_create
+  end
+rescue => e
+  p "an error occurred: #{e}"
+end
+
 hunts = []
 6.times  do |i|
   hunt = Hunt.create(
@@ -16,7 +31,7 @@ hunts = []
   hunts << hunt
 end
 
-plants = Plant.all
+plants = Plant.first(15)
 
 hunts.each do |hunt|
   plant_count = 0
@@ -38,6 +53,8 @@ hunts.each do |hunt|
         end
       end
 
+    else 
+      break
     end
   end
 end

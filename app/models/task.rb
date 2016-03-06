@@ -8,7 +8,9 @@ class Task < ActiveRecord::Base
   before_save :remove_parens
 
   def remove_parens
-    self.geo = self.geo.gsub('(', '').gsub(')', '')
+    if self.geo.present?
+      self.geo = self.geo.gsub('(', '').gsub(')', '')
+    end
   end
 
   def self.hunt_options
