@@ -40,7 +40,6 @@ class DashboardController < ApplicationController
   end
 
   def mark_task_as_done
-
     @task = Task.find_by(id: params[:task_id])
 
     UserTask.where(
@@ -49,7 +48,11 @@ class DashboardController < ApplicationController
     ).first_or_create()
 
     @task_done = true
+
+    HuntUser.where(user_id: current_user.id, hunt_id: @task.hunt_id).first_or_create
+    
     current_user.score += 10
+    current_user.save
 
     render partial: '/dashboard/task_view'
   end
