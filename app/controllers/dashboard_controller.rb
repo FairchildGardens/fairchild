@@ -19,11 +19,11 @@ class DashboardController < ApplicationController
 
     hunt_id = params[:hunt].to_i
     @hunt = Hunt.find(hunt_id)
+    @done_task_ids = current_user.tasks.where(hunt_id: @hunt.id).pluck(:task_id)
 
   end
 
   def get_hunt_tasks
-    params[:hunt_id] = Hunt.first.id
 
     tasks = Task.where(hunt_id: params[:hunt_id])
     done_task_ids = current_user.tasks.where(hunt_id: params[:hunt_id]).pluck(:task_id)
@@ -39,7 +39,6 @@ class DashboardController < ApplicationController
   end
 
   def mark_task_as_done
-
     @task = Task.find_by(id: params[:task_id])
 
     UserTask.where(
@@ -48,6 +47,11 @@ class DashboardController < ApplicationController
     ).first_or_create()
 
     @task_done = true
+
+    HuntUser.where(user_id: current_user.id, hunt_id: @task.hunt_id).first_or_create
+    
+    current_user.score += 10
+    current_user.save
 
     render partial: '/dashboard/task_view'
   end

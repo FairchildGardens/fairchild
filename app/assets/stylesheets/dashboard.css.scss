@@ -8,23 +8,33 @@ body.dashboard {
 
   &.landing_page {
 
-    .container__body {
-      .background-image {
-        zoom: 88%;
-        margin-left: -400px;
-        opacity: .8;
-        overflow: hidden;
-        display: block;
+    h1.logo {
+      width: 115px;
+      height: 140px;
+      background: image-url('logo.png');
+      display: block;
+      text-indent: -9999px;
+      margin: 0 auto 40px auto;
+    }
 
-        @media (min-width: 448px) {
-          display: none;
-        }
+    .container__body {
+      background: #000;
+      width: 100%;
+      height: 100%;
+
+      .background-image {
+        opacity: .5;
+        display: block;
+        background-image: image-url('homepage-bg.jpg');
+        height: 100%;
+        width: 100%;
+        background-size: cover;
       }
 
       .description {
         position: absolute;
         text-align: center;
-        top: 32%;
+        top: 12%;
         width: 100%;
         padding: 1rem;
         font-size: 32px;
@@ -32,6 +42,7 @@ body.dashboard {
         h1, h4 {
           color: $white;
           word-wrap: break-word;
+          font-weight: normal;
 
           @media (min-width: 448px) {
             color: $primary-text-color;
@@ -45,9 +56,16 @@ body.dashboard {
       position: absolute;
       bottom: 0;
       width: 100%;
+      padding: 20px;
 
       .login {
         margin: 0;
+        font-size: 22px;  
+      }
+      .login i {
+        margin-right: 5px;
+        font-size: 24px;
+        vertical-align: bottom;
       }
     }
 

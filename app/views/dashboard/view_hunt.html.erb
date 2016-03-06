@@ -1,6 +1,131 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClG3delsA9nPWuaYzJ_XJXYDyK8W4-Uc0" defer></script>
 
 <script>
+
+  function show_confetti() {
+
+    $('body > .content').prepend('<canvas id="confetti"></canvas>');
+    console.log('insert dom');
+
+    console.log('show_confetti()');
+
+    var COLORS, Confetti, NUM_CONFETTI, PI_2, canvas, confetti, context, drawCircle, i, range, resizeWindow, xpos;
+
+    NUM_CONFETTI = 350;
+
+    COLORS = [[85, 71, 106], [174, 61, 99], [219, 56, 83], [244, 92, 68], [248, 182, 70]];
+
+    PI_2 = 2 * Math.PI;
+
+    canvas = document.getElementById("confetti");
+
+    context = canvas.getContext("2d");
+
+    window.w = canvas.width = window.innerWidth;
+
+    window.h = canvas.height = ($('body > .content').height() + 88);
+
+    // resizeWindow = function() {
+    //   window.w = canvas.width = window.innerWidth;
+    //   return window.h = canvas.height = ($('body > .content').height() + 88);
+    // };
+
+    // window.addEventListener('resize', resizeWindow, false);
+
+    // window.onload = function() {
+    //   return setTimeout(resizeWindow, 0);
+    // };
+
+    range = function(a, b) {
+      return (b - a) * Math.random() + a;
+    };
+
+    drawCircle = function(x, y, r, style) {
+      context.beginPath();
+      context.arc(x, y, r, 0, PI_2, false);
+      context.fillStyle = style;
+      return context.fill();
+    };
+
+    xpos = 0.5;
+
+    document.onmousemove = function(e) {
+      return xpos = e.pageX / w;
+    };
+
+    window.requestAnimationFrame = (function() {
+      return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
+        return window.setTimeout(callback, 1000 / 60);
+      };
+    })();
+
+    Confetti = (function() {
+      function Confetti() {
+        this.style = COLORS[~~range(0, 5)];
+        this.rgb = "rgba(" + this.style[0] + "," + this.style[1] + "," + this.style[2];
+        this.r = ~~range(2, 6);
+        this.r2 = 2 * this.r;
+        this.replace();
+      }
+
+      Confetti.prototype.replace = function() {
+        this.opacity = 0;
+        this.dop = 0.03 * range(1, 4);
+        this.x = range(-this.r2, w - this.r2);
+        this.y = range(-20, h - this.r2);
+        this.xmax = w - this.r;
+        this.ymax = h - this.r;
+        this.vx = range(0, 2) + 8 * xpos - 5;
+        return this.vy = 0.7 * this.r + range(-1, 1);
+      };
+
+      Confetti.prototype.draw = function() {
+        var ref;
+        this.x += this.vx;
+        this.y += this.vy;
+        this.opacity += this.dop;
+        if (this.opacity > 1) {
+          this.opacity = 1;
+          this.dop *= -1;
+        }
+        if (this.opacity < 0 || this.y > this.ymax) {
+          this.replace();
+        }
+        if (!((0 < (ref = this.x) && ref < this.xmax))) {
+          this.x = (this.x + this.xmax) % this.xmax;
+        }
+        return drawCircle(~~this.x, ~~this.y, this.r, this.rgb + "," + this.opacity + ")");
+      };
+
+      return Confetti;
+
+    })();
+
+    confetti = (function() {
+      var j, ref, results;
+      results = [];
+      for (i = j = 1, ref = NUM_CONFETTI; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
+        results.push(new Confetti);
+      }
+      return results;
+    })();
+
+    window.step = function() {
+      var c, j, len, results;
+      requestAnimationFrame(step);
+      context.clearRect(0, 0, w, h);
+      results = [];
+      for (j = 0, len = confetti.length; j < len; j++) {
+        c = confetti[j];
+        results.push(c.draw());
+      }
+      return results;
+    };
+
+    step();
+
+  }
+
   $(document).ready(function() {
     
     var $body = $('body');
@@ -61,7 +186,7 @@
     // onError Callback receives a PositionError object
     //
     function onError(error) {
-      alert('code: '    + error.code    + '\n' +
+      console.log('code: '    + error.code    + '\n' +
             'message: ' + error.message + '\n');
     }
 
@@ -81,16 +206,17 @@
 
       $.ajax({
         url: '/dashboard/get_hunt_tasks',
-        data: { hunt_id: 3 }
+        data: { hunt_id: <%= params[:hunt] %> }
       }).done(function(data) {
-
-        console.log(data);
 
         var total_tasks = data.tasks.length;
         var total_tasks_done = data.done_task_ids.length;
-        var total_percent_done = Math.ceil(total_tasks_done / total_tasks * 100)
+        var total_percent_done = Math.ceil(total_tasks_done / total_tasks * 100);
         $('.progress-bar .progress').css('width', total_percent_done+'%');
 
+        if( total_percent_done == 100 ) {
+          show_confetti();
+        }
 
         clearMarkers();
 
@@ -157,8 +283,11 @@
           task_id: $button.data('task-id') 
         }
       }).done(function(task_html_partial) {
+        
         setMarkersOnMap(map);
         $('#show-task-view').removeClass('active');
+        $('.js-open-task[data-task-id="'+$button.data('task-id')+'"] .badge').removeClass('badge-primary').addClass('badge-positive').html('Done');
+
       });
 
     });
@@ -173,6 +302,39 @@
 
       }
 
+    });
+
+    $body.on('click', 'a.js-open-task', function(e) {
+      e.preventDefault();
+
+      var $button = $(this);
+      var taskId = $(this).data('task-id');
+
+      $.ajax({
+        url: '/dashboard/get_task_view',
+        data: { task_id: taskId }
+      }).done(function(task_html_partial) {
+        
+        $('#show-task-view h1.title').html($button.find('span.task-name').html());
+        $('#show-task-view .content').html(task_html_partial);
+        $('#show-task-view').addClass('active');
+
+      });
+
+    });
+
+    $body.on('click', '.js-toggle-map-list', function(e) {
+      e.preventDefault();
+
+      if( $(this).data('showing') == 'map' ) {
+        $('.show-map-view').hide();
+        $('.show-list-view').show();
+        $(this).data('showing', 'list').html('Map');
+      } else {
+        $('.show-list-view').hide();
+        $('.show-map-view').show();
+        $(this).data('showing', 'map').html('List');
+      }
 
     });
 
@@ -182,13 +344,40 @@
 
 <!-- Make sure all your bars are the first things in your <body> -->
 <header class="bar bar-nav">
+  <a href="/challenge" class="icon icon-left-nav pull-left" data-ignore="push"></a>
   <h1 class="title"><%= @hunt.name %></h1>
+  <a href="#" class="btn pull-right js-toggle-map-list" data-showing="map" data-ignore="push">
+    List
+  </a>
 </header>
 
 <!-- Wrap all non-bar HTML in the .content div (this is actually what scrolls) -->
 <div class="content">
+  
+  <div class="show-map-view" style="height: 100%;">
+    <div id="map" style="height: 100%"></div>
+  </div>
 
-  <div id="map" style="height: 100%"></div>
+  <div class="show-list-view" style="display: none;">
+    <ul class="table-view">
+
+      <% @hunt.tasks.each do |task| %>
+        <li class="table-view-cell js-open-task">
+          <a href="#" class="js-open-task" data-task-id="<%= task.id %>" data-ignore="push">
+            <% if @done_task_ids.include?(task.id) %>
+              <span class="badge badge-positive">Done</span>
+            <% else %>
+              <span class="badge badge-primary">Missing</span>
+            <% end %>
+            <span class="task-name">
+              <%= task.name %> 
+            </span>
+          </a>
+        </li>
+      <% end %>
+
+    </ul>  
+  </div>
 
 </div>
 

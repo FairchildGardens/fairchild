@@ -9,7 +9,7 @@
     <ul class="table-view">
 
       <% @hunts.each do |hunt| %>
-        <%= link_to("/dashboard/view_hunt?hunt=#{hunt.id}") do %>
+        <%= link_to("/dashboard/view_hunt?hunt=#{hunt.id}", { 'data-ignore' => 'push' }) do %>
           <div class="challenge__item">
             <span class="challenge__desc"><%= hunt.name %></span>
             <img class="challenge__image" src="<%= hunt.image %>">
