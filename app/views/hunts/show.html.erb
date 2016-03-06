@@ -14,10 +14,11 @@
   <dt>Name:</dt>
   <dd><%= @hunt.name %></dd>
 
-  <dt>Image:</dt>
-  <dd><%= @hunt.image %></dd>
+  <dd><%= image_tag "#{@hunt.image}", size: "500" %></dd>
 
   <dt>Description:</dt>
   <dd><%= @hunt.description %></dd>
-
 </dl>
+
+<%= link_to 'New Task', new_task_path %>
+

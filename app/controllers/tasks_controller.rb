@@ -37,6 +37,13 @@ class TasksController < ApplicationController
     end
   end
 
+  # GET /tasks/search_wiki
+  def search_wiki
+    @task = Task.new()
+    result = @task.searchWiki(params[:query])
+    render json: result
+  end
+
   # PATCH/PUT /tasks/1
   # PATCH/PUT /tasks/1.json
   def update
@@ -69,6 +76,6 @@ class TasksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_params
-      params.require(:task).permit(:name, :geo, :claim_type, :image, :draft, :hunt_id)
+      params.require(:task).permit(:name, :geo, :claim_type, :image, :draft, :hunt_id, :query)
     end
 end

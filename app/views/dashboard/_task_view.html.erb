@@ -2,5 +2,9 @@
   <img src="<%= @task.image %>" alt="" style="width: 100%;" />
 </div>
 
-<% if 
-<button class="btn btn-positive btn-block btn-outlined">Mark as done!</button>
+
+<% if @task_done %>
+  <button class="btn btn-positive btn-block js-mark-as-not-done" data-task-id="<%= @task.id %>" data-ignore="push">Task is done!</button>
+<% else %>
+  <button class="btn btn-positive btn-block btn-outlined js-mark-as-done" data-task-id="<%= @task.id %>" data-ignore="push">Mark as done!</button>
+<% end %>

@@ -1,50 +1,134 @@
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClG3delsA9nPWuaYzJ_XJXYDyK8W4-Uc0" defer></script>
+
 <script>
   $(document).ready(function() {
     
+    var $body = $('body');
 
-    $.ajax({
-      url: '/dashboard/get_hunt_tasks',
-      data: { hunt_id: 3 }
-    }).done(function(tasks) {
-      
-      var map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: 25.6768691, lng: -80.2731083 },
-        zoom: 16,
-        mapTypeId: google.maps.MapTypeId.HYBRID
-      });
+    var map = new google.maps.Map(document.getElementById('map'), {
+      center: { lat: 25.6768691, lng: -80.2731083 },
+      zoom: 16,
+      mapTypeId: google.maps.MapTypeId.HYBRID
+    });
 
-      var markers = [];
+    var watchID = null;
+    var currentLocationMarker;
 
-      $.each(tasks, function(i, task) {
+    // PhoneGap is ready
+    //
+    function startWatching() {
+      // Update every 1 ms seconds
+      var options = {
+        enableHighAccuracy: true, 
+        timeout: 5000,
+        maximumAge: 0,
+        desiredAccuracy: 0, 
+        frequency: 1 
+      };
+      watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
+    }
 
-        var lat = parseFloat(task.geo.split(',')[0]);
-        var lng = parseFloat(task.geo.split(',')[1]);
+    // onSuccess Geolocation
+    //
+    function onSuccess(position) {
 
-        markers.push({
-          position: { lat: lat, lng: lng },
-          map: map,
-          title: task.name,
-          taskName: task.name,
-          taskId: task.id
-        });
+      var currentLocationMarkerData = {
+        position: { lat: position.coords.latitude, lng: position.coords.longitude },
+        map: map,
+        icon: '<%= image_url('current-location-icon.png') %>'
+      };
 
-      });
+      if( currentLocationMarker != null ) {
+        currentLocationMarker.setMap(null);
+      }
 
-      $.each(markers, function(i, marker) {
+      currentLocationMarker = new google.maps.Marker(currentLocationMarkerData);
+    }
 
-        var gMarker = new google.maps.Marker(marker);
+    // clear the watch that was started earlier
+    // 
+    function clearWatch() {
+      if (watchID != null) {
+          navigator.geolocation.clearWatch(watchID);
+          watchID = null;
+      }
+      if( currentLocationMarker != null ) {
+        currentLocationMarker.setMap(null);
+      }
+    }
 
-        gMarker.addListener('click', function() {
-          
-          $('#show-task-view h1.title').html(marker.taskName);
+    // onError Callback receives a PositionError object
+    //
+    function onError(error) {
+      alert('code: '    + error.code    + '\n' +
+            'message: ' + error.message + '\n');
+    }
 
-          $.ajax({
-            url: '/dashboard/get_task_view',
-            data: { task_id: marker.taskId }
-          }).done(function(task_html_partial) {
+    startWatching();
+
+    var markers = [];
+    setMarkersOnMap(map);
+
+
+    function clearMarkers() {
+      for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+      }
+    }
+
+    function setMarkersOnMap(map) {
+
+      $.ajax({
+        url: '/dashboard/get_hunt_tasks',
+        data: { hunt_id: 3 }
+      }).done(function(data) {
+
+        console.log(data);
+
+        var total_tasks = data.tasks.length;
+        var total_tasks_done = data.done_task_ids.length;
+        var total_percent_done = Math.ceil(total_tasks_done / total_tasks * 100)
+        $('.progress-bar .progress').css('width', total_percent_done+'%');
+
+
+        clearMarkers();
+
+        $.each(data.tasks, function(i, task) {
+
+          var lat = parseFloat(task.geo.split(',')[0]);
+          var lng = parseFloat(task.geo.split(',')[1]);
+
+          if( data.done_task_ids.indexOf(task.id) > -1 ) {
+            var markerIcon = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
+          } else {
+            var markerIcon = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+          }
+
+          var markerData = {
+            position: { lat: lat, lng: lng },
+            map: map,
+            title: task.name,
+            taskName: task.name,
+            taskId: task.id,
+            icon: markerIcon
+          };
+
+          var marker = new google.maps.Marker(markerData);
+          markers.push(marker);
+
+          marker.addListener('click', function() {
             
-            $('#show-task-view .content').html(task_html_partial);
-            $('#show-task-view').addClass('active');
+            $('#show-task-view h1.title').html(markerData.taskName);
+
+            $.ajax({
+              url: '/dashboard/get_task_view',
+              data: { task_id: markerData.taskId }
+            }).done(function(task_html_partial) {
+              
+              $('#show-task-view .content').html(task_html_partial);
+              $('#show-task-view').addClass('active');
+
+            });
 
           });
 
@@ -52,66 +136,48 @@
 
       });
 
+    }
+
+    // mark task as done
+    $body.on('click', 'button.js-mark-as-done', function(e) {
+      e.preventDefault();
+
+      var $button = $(this);
+
+      if( $button.hasClass('disabled') )
+        return false;
+
+      $button.addClass('disabled');
+
+      $.ajax({
+        type: 'POST',
+        url: '/dashboard/mark_task_as_done',
+        data: { 
+          task_id: $button.data('task-id') 
+        }
+      }).done(function(task_html_partial) {
+        setMarkersOnMap(map);
+        $('#show-task-view').removeClass('active');
+      });
 
     });
 
+    $body.on('click', 'a.js-show-current-location', function(e) {
+      e.preventDefault();
+
+      if( currentLocationMarker != null ) {
+
+        var center = new google.maps.LatLng(currentLocationMarker.position.lat(), currentLocationMarker.position.lng());
+        map.panTo(center);
+
+      }
+
+
+    });
 
   });
 
-  function initMap() {
-    
-    
-    
-    
-
-    // var watchID = null;
-
-    // // PhoneGap is ready
-    // //
-    // function startWatching() {
-    //   // Update every 1 ms seconds
-    //   var options = {
-    //     enableHighAccuracy: true, 
-    //     timeout: 5000,
-    //     maximumAge: 0,
-    //     desiredAccuracy: 0, 
-    //     frequency: 1 
-    //   };
-    //   watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
-    // }
-
-    // // onSuccess Geolocation
-    // //
-    // function onSuccess(position) {
-        
-    //   var str = 'Latitude: '  + position.coords.latitude      + '<br>' +
-    //             'Longitude: ' + position.coords.longitude     + '<br>' +
-    //             'Timestamp: ' + position.timestamp     + '<br>\r\n' ;
-    //   console.log(str);
-    // }
-
-    // // clear the watch that was started earlier
-    // // 
-    // function clearWatch() {
-    //   if (watchID != null) {
-    //       navigator.geolocation.clearWatch(watchID);
-    //       watchID = null;
-    //   }
-    // }
-
-    // // onError Callback receives a PositionError object
-    // //
-    // function onError(error) {
-    //   alert('code: '    + error.code    + '\n' +
-    //         'message: ' + error.message + '\n');
-    // }
-
-    // startWatching();
-
-  }
 </script>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClG3delsA9nPWuaYzJ_XJXYDyK8W4-Uc0" async defer></script>
 
 <!-- Make sure all your bars are the first things in your <body> -->
 <header class="bar bar-nav">
@@ -126,7 +192,17 @@
 </div>
 
 <div class="bar bar-standard bar-footer">
-  Progress goes here..
+  
+  <div class="location">
+    <a href="#" class="btn btn-link js-show-current-location">
+      <i class="fa fa-location-arrow"></i>
+    </a>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress"></div>
+  </div>
+
 </div>
 
 

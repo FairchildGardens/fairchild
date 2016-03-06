@@ -1,3 +1,11 @@
+<style>
+  #map {
+    width: 500px;
+    height: 400px;
+    background-color: #CCC;
+  }
+</style>
+
 <%= form_for(@task, html: { class: "form-horizontal", role: "form" }) do |f| %>
   <% if @task.errors.any? %>
     <div class="alert alert-danger alert-dismissable" role="alert">
@@ -24,28 +32,27 @@
       <%= f.text_field :geo, class: "form-control" %>
     </div>
   </div>
+
+  <div id="map"></div>
+
   <div class="form-group">
     <%= f.label :claim_type, class: "col-sm-2 control-label" %>
     <div class="col-sm-10">
-      <%= f.text_field :claim_type, class: "form-control" %>
+      <%= f.select :claim_type, options_for_select(Task.claim_types), {}, class: "form-control" %>
     </div>
   </div>
+
   <div class="form-group">
-    <%= f.label :image, class: "col-sm-2 control-label" %>
+    <%= f.label "Image Url", class: "col-sm-2 control-label" %>
     <div class="col-sm-10">
       <%= f.text_field :image, class: "form-control" %>
     </div>
   </div>
-  <div class="form-group">
-    <%= f.label :draft, class: "col-sm-2 control-label" %>
-    <div class="col-sm-10">
-      <%= f.text_field :draft, class: "form-control" %>
-    </div>
-  </div>
+  
   <div class="form-group">
     <%= f.label :hunt_id, class: "col-sm-2 control-label" %>
     <div class="col-sm-10">
-      <%= f.number_field :hunt_id, class: "form-control" %>
+      <%= f.select :hunt_id, options_for_select(Task.hunt_options), {}, class: "form-control" %>
     </div>
   </div>
   <div class="form-group">
@@ -54,3 +61,45 @@
     </div>
   </div>
 <% end %>
+
+<script type="text/javascript">
+  var markers = []
+  function initMap() {
+    var mapDiv = document.getElementById('map');
+    var map = new google.maps.Map(mapDiv, {
+      center: {lat: 25.677192302730536, lng: -80.27254343043751},
+      zoom: 16
+  });
+
+    // var marker = new google.maps.Marker({
+    //   position: myLatLng,
+    //   map: map,
+    //   title: 'Hello World!'
+    // });
+
+    google.maps.event.addListener(map, 'click', function(event) {
+      clearMarkers();
+      marker = new google.maps.Marker({position: event.latLng, map: map});
+      $("input#task_geo").val(event.latLng)
+      markers.push(marker);
+    });
+
+    // Sets the map on all markers in the array.
+    function setMapOnAll(map) {
+      for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+      }
+    }
+
+    // Removes the markers from the map, but keeps them in the array.
+    function clearMarkers() {
+      setMapOnAll(null);
+    }
+  }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClG3delsA9nPWuaYzJ_XJXYDyK8W4-Uc0&amp;callback=initMap" async defer></script>
+
+
+
+
